@@ -7,14 +7,13 @@ import aioconsole
 
 
 async def aloop(presence):
-	loop = True
 	i = 0
-	while loop:
+	while True:
 		print(i)
 		await asyncio.sleep(1)
 		i += 1
 		if i == 10:
-			loop = False
+			break
 	exit()
 
 
