@@ -2,7 +2,7 @@ from discordrp import Presence
 import time
 import os
 import asyncio
-import aioconsole
+import aioconsole as aio
 
 
 activity = {
@@ -16,14 +16,49 @@ activity = {
 	}
 }
 
+
+
+async def waita():
+	for i in range(15, -1, -1):
+		print(f"\rWait for {i} seconds for next command.", end='')
+		await asyncio.sleep(1)
+		print("\r                                       ", end='')
+	print('\r', end='')
+
 async def aloop(presence):
 	i = 0
+	await waita()
 	while True:
-		print(i)
-		await asyncio.sleep(1)
-		i += 1
-		if i == 10:
-			break
+		update = False
+
+		inp = await aio.ainput(">> ")
+		match inp.split():
+			case ["exit"]:
+				print("Exiting...")
+				break
+			case ["textup" | "toptext", *text]:
+				res = ""
+				for t in text:
+					res += t + ' '
+				res = res[:-1]
+
+				activity['details'] = res
+				update = True
+				print(f"Changed top text to \"{res}\".")
+			case ["textdown" | "bottomtext", *text]:
+				res = ""
+				for t in text:
+					res += t + ' '
+				res = res[:-1]
+
+				activity['state'] = res
+				update = True
+				print(f"Changed bottom text to \"{res}\".")
+		
+		if update:
+			presence.set(activity)
+			await waita()
+		
 	exit()
 
 
