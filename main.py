@@ -1,6 +1,22 @@
 from discordrp import Presence
 import time
 import os
+import asyncio
+import aioconsole
+
+
+
+async def aloop(presence):
+	loop = True
+	i = 0
+	while loop:
+		print(i)
+		await asyncio.sleep(1)
+		i += 1
+		if i == 10:
+			loop = False
+	exit()
+
 
 presence = None
 file = None
@@ -27,7 +43,8 @@ try:
 		}
 	}
 	presence.set(activity)
-	
+
+	asyncio.run(aloop(presence))
 	
 
 except Exception as e:
