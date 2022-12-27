@@ -5,6 +5,16 @@ import asyncio
 import aioconsole
 
 
+activity = {
+	'details': "Messing with Rich Presence",
+	'state': 'PC has been running for:',
+	'timestamps': {
+		'start': int(time.time() - time.clock_gettime(1))
+	},
+	'assets': {
+		'large_image': 'slime'
+	}
+}
 
 async def aloop(presence):
 	i = 0
@@ -31,16 +41,6 @@ try:
 		exit(-1)
 
 	presence = Presence(presence_id)
-	activity = {
-        'state': 'PC has been running for:',
-        'details': "Messing with Rich Presence",
-        'timestamps': {
-            'start': int(time.time() - time.clock_gettime(1))
-        },
-		'assets': {
-			'large_image': 'slime'
-		}
-	}
 	presence.set(activity)
 
 	asyncio.run(aloop(presence))
