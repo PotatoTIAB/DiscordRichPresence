@@ -18,13 +18,6 @@ activity["timestamps"] = {}
 activity["timestamps"]["start"] = int(time.time() - time.clock_gettime(1))
 
 
-# async def waita():
-# 	for i in range(15, -1, -1):
-# 		print(f"\rWait for {i} seconds for next command.", end='')
-# 		await asyncio.sleep(1)
-# 		print("\r                                       ", end='')
-# 	print('\r', end='')
-
 async def aloop(presence: Presence):
 	i = 0
 	last_time = time.time()
