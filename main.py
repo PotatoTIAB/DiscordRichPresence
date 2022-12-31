@@ -3,19 +3,19 @@ import time
 import os
 import asyncio
 import aioconsole as aio
+import json
+import os
 
 
-activity = {
-	'details': "Messing with Rich Presence",
-	'state': 'PC has been running for:',
-	'timestamps': {
-		'start': int(time.time() - time.clock_gettime(1))
-	},
-	'assets': {
-		'large_image': 'slime'
-	}
-}
+try:
+	file = open(os.path.dirname(__file__) + "/activity.json")
+	activity = json.load(file)
+except:
+	print("can't read from the file")
+	exit(1)
 
+activity["timestamps"] = {}
+activity["timestamps"]["start"] = int(time.time() - time.clock_gettime(1))
 
 
 async def waita():
@@ -25,7 +25,7 @@ async def waita():
 		print("\r                                       ", end='')
 	print('\r', end='')
 
-async def aloop(presence):
+async def aloop(presence: Presence):
 	i = 0
 	await waita()
 	while True:
