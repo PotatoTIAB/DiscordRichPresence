@@ -68,7 +68,7 @@ async def aloop(presence: Presence):
 
 				activity.update(update)
 				presence.set(activity)
-				uptade = {}
+				update.clear()
 				last_time = time.time()
 		
 	exit()
