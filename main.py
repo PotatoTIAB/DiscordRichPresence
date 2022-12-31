@@ -18,46 +18,58 @@ activity["timestamps"] = {}
 activity["timestamps"]["start"] = int(time.time() - time.clock_gettime(1))
 
 
-async def waita():
-	for i in range(15, -1, -1):
-		print(f"\rWait for {i} seconds for next command.", end='')
-		await asyncio.sleep(1)
-		print("\r                                       ", end='')
-	print('\r', end='')
+# async def waita():
+# 	for i in range(15, -1, -1):
+# 		print(f"\rWait for {i} seconds for next command.", end='')
+# 		await asyncio.sleep(1)
+# 		print("\r                                       ", end='')
+# 	print('\r', end='')
 
 async def aloop(presence: Presence):
 	i = 0
-	await waita()
+	last_time = time.time()
+	update = {}
 	while True:
-		update = False
-
 		inp = await aio.ainput(">> ")
 		match inp.split():
 			case ["exit"]:
 				print("Exiting...")
 				break
+			
 			case ["textup" | "toptext", *text]:
 				res = ""
 				for t in text:
 					res += t + ' '
 				res = res[:-1]
 
-				activity['details'] = res
-				update = True
-				print(f"Changed top text to \"{res}\".")
+				update.update({'details': res})
+				print(f"Top text is going to be \"{res}\".")
+			
 			case ["textdown" | "bottomtext", *text]:
 				res = ""
 				for t in text:
 					res += t + ' '
 				res = res[:-1]
 
-				activity['state'] = res
-				update = True
-				print(f"Changed bottom text to \"{res}\".")
-		
-		if update:
-			presence.set(activity)
-			await waita()
+				update.update({'state': res})
+				print(f"Bottom text is going to be \"{res}\".")
+			
+			case ["update"]:
+				if len(update) < 1:
+					print("There's nothing to update.")
+					print(update)
+					continue
+					
+				time_passed = time.time() - last_time
+				if time_passed < 15:
+					print(f"Wait for {15 - time_passed} seconds to execute a command.")
+					continue
+				
+
+				activity.update(update)
+				presence.set(activity)
+				uptade = {}
+				last_time = time.time()
 		
 	exit()
 
