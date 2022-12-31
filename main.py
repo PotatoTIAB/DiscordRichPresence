@@ -7,12 +7,18 @@ import json
 import os
 
 
+
+file = None
 try:
 	file = open(os.path.dirname(__file__) + "/activity.json")
 	activity = json.load(file)
 except:
-	print("can't read from the file")
+	print("Cannot read activity.json.")
 	exit(1)
+finally:
+	if file is not None:
+		file.close()
+
 
 activity["timestamps"] = {}
 activity["timestamps"]["start"] = int(time.time() - time.clock_gettime(1))
