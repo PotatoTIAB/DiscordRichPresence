@@ -67,7 +67,7 @@ activity["timestamps"]["start"] = int(time.time() - time.clock_gettime(1))
 async def aloop(presence: Presence):
 	i = 0
 	last_time = time.time()
-	update = {}
+	update = {"assets": {}}
 	while True:
 		inp = await aio.ainput(">> ")
 		match inp.split():
@@ -92,6 +92,14 @@ async def aloop(presence: Presence):
 
 				update.update({'state': res})
 				print(f"Bottom text is going to be \"{res}\".")
+			
+			case ["limage", image]:
+				if check_image(image):
+					update["assets"].update({"large_image": image})
+			
+			case ["simage", image]:
+				if check_image(image):
+					update["assets"].update({"small_image": image})
 			
 			case ["update"]:
 				if len(update) < 1:
