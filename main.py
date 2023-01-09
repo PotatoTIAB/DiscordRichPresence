@@ -101,6 +101,12 @@ async def aloop(presence: Presence):
 				if check_image(image):
 					update["assets"].update({"small_image": image})
 			
+			case ["litext", *text]:
+				update["assets"].update({"large_text": ' '.join(text)})
+			
+			case ["sitext", *text]:
+				update["assets"].update({"small_text": ' '.join(text)})
+			
 			case ["update"]:
 				if len(update) < 1:
 					print("There's nothing to update.")
