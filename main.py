@@ -114,21 +114,24 @@ async def aloop(presence: Presence):
 				print(f"Small image text is going to be \"{text}\".")
 			
 			case ["update"]:
-				if len(update) < 1:
+				if len(update) < 2 and len(update["assets"]) < 1:
 					print("There's nothing to update.")
-					print(update)
 					continue
 					
 				time_passed = time.time() - last_time
 				if time_passed < 15:
-					print(f"Wait for {15 - time_passed} seconds to execute a command.")
+					print(f"Wait for {15 - time_passed:.1f} seconds to execute a command.")
 					continue
 				
 
 				activity.update(update)
 				presence.set(activity)
 				update.clear()
+				update.update({"assets": {}})
 				last_time = time.time()
+			
+			case [*any]:
+				print(f"Unknown command: " + ' '.join(any))
 		
 	exit()
 
