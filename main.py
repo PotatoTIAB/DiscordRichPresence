@@ -32,7 +32,11 @@ def check_image(image):
 
 
 def activity_check_image(activity):
-	ass = activity["assets"]
+	ass: dict = activity["assets"]
+	if "small_image" in ass.keys() and not check_image(ass["small_image"]):
+		del activity["assets"]["small_image"]
+	if "large_image" in ass.keys() and not check_image(ass["large_image"]):
+		del activity["assets"]["large_image"]
 	
 
 activity = {}
@@ -49,7 +53,7 @@ finally:
 	if file is not None:
 		file.close()
 
-
+activity_check_image(activity)
 activity["timestamps"] = {}
 activity["timestamps"]["start"] = int(time.time() - time.clock_gettime(1))
 
