@@ -7,11 +7,41 @@ import json
 import os
 
 
+file = None
+try:
+	file = open(os.path.dirname(__file__) + "/images")
+	data = file.read()
+	if data is not None and len(data) > 0:
+		images = data.split()
+	else:
+		print("Warning, no images found. Make sure to check './images'.")
+		images = []
+except:
+	print("Cannot read activity.json.")
+	exit(1)
+finally:
+	if file is not None:
+		file.close()
+
+
+def check_image(image):
+	if not image in images:
+		print(f"Image {image} not in images file.")
+		return False
+	return True
+
+
+def activity_check_image(activity):
+	ass = activity["assets"]
+	
+
+activity = {}
+activity["assets"] = {}
 
 file = None
 try:
 	file = open(os.path.dirname(__file__) + "/activity.json")
-	activity = json.load(file)
+	activity.update(json.load(file))
 except:
 	print("Cannot read activity.json.")
 	exit(1)
