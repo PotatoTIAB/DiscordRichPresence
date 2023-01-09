@@ -96,16 +96,22 @@ async def aloop(presence: Presence):
 			case ["limage", image]:
 				if check_image(image):
 					update["assets"].update({"large_image": image})
+					print(f"Large image is going to be \"{image}\".")
 			
 			case ["simage", image]:
 				if check_image(image):
 					update["assets"].update({"small_image": image})
+					print(f"Small image is going to be \"{image}\".")
 			
 			case ["litext", *text]:
-				update["assets"].update({"large_text": ' '.join(text)})
+				text = ' '.join(text)
+				update["assets"].update({"large_text": text})
+				print(f"Large image text is going to be \"{text}\".")
 			
 			case ["sitext", *text]:
-				update["assets"].update({"small_text": ' '.join(text)})
+				text = ' '.join(text)
+				update["assets"].update({"small_text": text})
+				print(f"Small image text is going to be \"{text}\".")
 			
 			case ["update"]:
 				if len(update) < 1:
