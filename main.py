@@ -33,10 +33,16 @@ def check_image(image):
 
 def activity_check_image(activity):
 	ass: dict = activity["assets"]
+	res = []
 	if "small_image" in ass.keys() and not check_image(ass["small_image"]):
+		res.append(ass["small_image"])
 		del activity["assets"]["small_image"]
 	if "large_image" in ass.keys() and not check_image(ass["large_image"]):
+		res.append(ass["large_image"])
 		del activity["assets"]["large_image"]
+	
+	if len(res) > 0:
+		print(f"Image(s) {', '.join(res)} are removed.")
 	
 
 activity = {}
