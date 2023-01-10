@@ -114,8 +114,12 @@ async def aloop(presence: Presence):
 				print(f"Small image text is going to be \"{text}\".")
 			
 			case ["update"]:
-				if len(update) < 2 and len(update["assets"]) < 1:
+				if len(update["assets"]) < 1:
+					del update["assets"]
+				
+				if len(update) < 1:
 					print("There's nothing to update.")
+					update.update({"assets": {}})
 					continue
 					
 				time_passed = time.time() - last_time
