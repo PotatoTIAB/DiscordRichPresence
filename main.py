@@ -7,21 +7,48 @@ import json
 import os
 
 
-file = None
-try:
-	file = open(os.path.dirname(__file__) + "/images")
-	data = file.read()
-	if data is not None and len(data) > 0:
-		images = data.split()
-	else:
-		print("Warning, no images found. Make sure to check './images'.")
-		images = []
-except:
-	print("Cannot read activity.json.")
-	exit(1)
-finally:
-	if file is not None:
-		file.close()
+def read_images():
+	file = None
+	try:
+		file = open(os.path.dirname(__file__) + "/images")
+		data = file.read()
+		if data is not None and len(data) > 0:
+			images = data.split()
+		else:
+			print("Warning, no images found. Make sure to check './images'.")
+			images = []
+	except:
+		print("Cannot read activity.json.")
+		exit(1)
+	finally:
+		if file is not None:
+			file.close()
+	return images
+	
+
+
+
+def read_activity():
+	file = None
+	activity = {}
+	activity["assets"] = {}
+	try:
+		file = open(os.path.dirname(__file__) + "/activity.json")
+		activity.update(json.load(file))
+		activity_check_image(activity)
+	except:
+		print("Cannot read activity.json.")
+	finally:
+		if file is not None:
+			file.close()
+		return activity
+
+
+
+def set_time(act):
+	act["timestamps"] = {}
+	act["timestamps"]["start"] = int(time.time() - time.clock_gettime(1))
+
 
 
 def check_image(image):
@@ -29,6 +56,7 @@ def check_image(image):
 		print(f"Image {image} not in images file.")
 		return False
 	return True
+
 
 
 def activity_check_image(activity):
@@ -45,23 +73,10 @@ def activity_check_image(activity):
 		print(f"Image(s) {', '.join(res)} are removed.")
 	
 
-activity = {}
-activity["assets"] = {}
 
-file = None
-try:
-	file = open(os.path.dirname(__file__) + "/activity.json")
-	activity.update(json.load(file))
-except:
-	print("Cannot read activity.json.")
-	exit(1)
-finally:
-	if file is not None:
-		file.close()
-
-activity_check_image(activity)
-activity["timestamps"] = {}
-activity["timestamps"]["start"] = int(time.time() - time.clock_gettime(1))
+images = read_images()
+activity = read_activity()
+set_time(activity)
 
 
 async def aloop(presence: Presence):
