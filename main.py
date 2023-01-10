@@ -99,12 +99,19 @@ def get_app_id():
 	
 	presence_id = file.readline()
 
+
 	if presence_id == "":
 		print("Warning empty string in \"app_id\" detected.")
 		return ""
 
+
 	if presence_id[-1] == '\n':
 		presence_id = presence_id.strip('\n')
+
+
+	if presence_id == "[insert app id here]":
+		print("Please insert your app id to file \"app_id\".")
+		return ""
 
 
 	if not presence_id.isdigit():
