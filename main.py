@@ -1,10 +1,14 @@
-from discordrp import Presence
-import time
-import os
-import asyncio
-import aioconsole as aio
-import json
-import os
+try:
+	from discordrp import Presence
+	import time
+	import os
+	import asyncio
+	import aioconsole as aio
+	import json
+	import os
+except ModuleNotFoundError as error:
+	print(f"Warning module \"{error.name}\" not found. Please install required modules to use.")
+	exit(2)
 
 
 def read_images():
@@ -25,7 +29,6 @@ def read_images():
 			file.close()
 	return images
 	
-
 
 
 def read_activity():
