@@ -11,6 +11,19 @@ except ModuleNotFoundError as error:
 	exit(2)
 
 
+helps = [
+	"help: Shows this menu.",
+	"exit: Quits program.",
+	"toptext (text): Changes the first line.",
+	"bottomtext (text): Changes the second line.",
+	"limage (image): Switchs large image.",
+	"simage (image): Switchs small image.",
+	"litext (text): Changes hover text of large image",
+	"sitext (text): Changes hover text of small image",
+	"update: Commits all changes."
+]
+
+
 def read_images():
 	file = None
 	try:
@@ -100,6 +113,10 @@ async def aloop(presence: Presence):
 			case ["exit"]:
 				print("Exiting...")
 				break
+
+			case["help"]:
+				for line in helps:
+					print(line)
 			
 			case ["textup" | "toptext", *text]:
 				res = ""
@@ -161,7 +178,7 @@ async def aloop(presence: Presence):
 				last_time = time.time()
 			
 			case [*any]:
-				print(f"Unknown command: " + ' '.join(any))
+				print(f"Unknown command: {' '.join(any)}\nType \"help\" for commands.")
 		
 	exit()
 
