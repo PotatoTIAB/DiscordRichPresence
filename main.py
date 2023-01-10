@@ -71,12 +71,20 @@ def activity_check_image(activity):
 	
 	if len(res) > 0:
 		print(f"Image(s) {', '.join(res)} are removed.")
+
+
+
+def get_app_id():
+	file = open(os.path.dirname(__file__) + "/app_id")
+	presence_id = file.readline()
 	
+	if presence_id[-1] == '\n':
+		presence_id = presence_id[:-1]
+	
+	if not presence_id.isdigit():
+		presence_id = ""
 
-
-images = read_images()
-activity = read_activity()
-set_time(activity)
+	return presence_id
 
 
 async def aloop(presence: Presence):
@@ -155,18 +163,18 @@ async def aloop(presence: Presence):
 	exit()
 
 
+images = read_images()
+activity = read_activity()
+set_time(activity)
+
+
 presence = None
 file = None
 try:
-	file = open(os.path.dirname(__file__) + "/app_id")
-	presence_id = file.readline()
-	
-	if presence_id[-1] == '\n':
-		presence_id = presence_id[:-1]
-	
-	if not presence_id.isdigit():
-		print("App id is not valid.")
-		exit(-1)
+	presence_id = get_app_id()
+	if presence_id == "":
+		print("App id is not valid. Exiting...")
+		exit(1)
 
 	presence = Presence(presence_id)
 	presence.set(activity)
