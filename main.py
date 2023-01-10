@@ -91,14 +91,26 @@ def activity_check_image(activity):
 
 
 def get_app_id():
-	file = open(os.path.dirname(__file__) + "/app_id")
+	try:
+		file = open(os.path.dirname(__file__) + "/app_id")
+	except FileNotFoundError:
+		print("Warning \"app_id\" not found, please create one in the same folder with \"main.py\".")
+		return ""
+	
 	presence_id = file.readline()
-	
+
+	if presence_id == "":
+		print("Warning empty string in \"app_id\" detected.")
+		return ""
+
 	if presence_id[-1] == '\n':
-		presence_id = presence_id[:-1]
-	
+		presence_id = presence_id.strip('\n')
+
+
 	if not presence_id.isdigit():
-		presence_id = ""
+		print("Your app id must only consist from digits.")
+		return ""
+	
 
 	return presence_id
 
