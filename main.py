@@ -71,7 +71,7 @@ def write_activity(act):
 		success = True
 	finally:
 		if file is not None:
-			file.closed()
+			file.close()
 		return success
 
 
