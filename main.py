@@ -20,7 +20,8 @@ helps = [
 	"simage (image): Switchs small image.",
 	"litext (text): Changes hover text of large image",
 	"sitext (text): Changes hover text of small image",
-	"update: Commits all changes."
+	"update: Commits all changes.",
+	"save: Saves current activity to 'activity.json'."
 ]
 
 
@@ -58,6 +59,20 @@ def read_activity():
 		if file is not None:
 			file.close()
 		return activity
+
+
+def write_activity(act):
+	file = None
+	success = False
+	del act["timestamps"]
+	try:
+		file = open(os.path.dirname(__file__) + "/config/activity.json", 'w')
+		json.dump(act, file, indent=4, sort_keys=True)
+		success = True
+	finally:
+		if file is not None:
+			file.closed()
+		return success
 
 
 
@@ -196,6 +211,12 @@ async def aloop(presence: Presence):
 				update.update({"assets": {}})
 				last_time = time.time()
 			
+			case ["save"]:
+				if write_activity(activity):
+					print("Saved successfully!")
+				else:
+					print("Saving failed.")
+			
 			case [*any]:
 				print(f"Unknown command: {' '.join(any)}\nType \"help\" for commands.")
 		
@@ -222,7 +243,7 @@ try:
 	
 
 except Exception as e:
-	print(e)
+	raise e
 finally:
 	if presence is not None:
 		presence.close()
