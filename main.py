@@ -62,6 +62,7 @@ def read_activity():
 
 
 def write_activity(act):
+	act = act.copy()
 	file = None
 	success = False
 	del act["timestamps"]
