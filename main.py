@@ -27,12 +27,12 @@ helps = [
 def read_images():
 	file = None
 	try:
-		file = open(os.path.dirname(__file__) + "/images")
+		file = open(os.path.dirname(__file__) + "/config/images")
 		data = file.read()
 		if data is not None and len(data) > 0:
 			images = data.split()
 		else:
-			print("Warning, no images found. Make sure to check './images'.")
+			print("Warning, no images found. Make sure to check 'images' in config.")
 			images = []
 	except:
 		print("Cannot read activity.json.")
@@ -49,7 +49,7 @@ def read_activity():
 	activity = {}
 	activity["assets"] = {}
 	try:
-		file = open(os.path.dirname(__file__) + "/activity.json")
+		file = open(os.path.dirname(__file__) + "/config/activity.json")
 		activity.update(json.load(file))
 		activity_check_image(activity)
 	except:
@@ -92,7 +92,7 @@ def activity_check_image(activity):
 
 def get_app_id():
 	try:
-		file = open(os.path.dirname(__file__) + "/app_id")
+		file = open(os.path.dirname(__file__) + "/config/app_id")
 	except FileNotFoundError:
 		print("Warning \"app_id\" not found, please create one in the same folder with \"main.py\".")
 		return ""
