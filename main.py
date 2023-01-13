@@ -5,7 +5,6 @@ try:
 	import asyncio
 	import aioconsole as aio
 	import json
-	import os
 except ModuleNotFoundError as error:
 	print(f"Warning module \"{error.name}\" not found. Please install required modules to use.")
 	exit(2)
