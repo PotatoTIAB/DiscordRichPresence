@@ -11,6 +11,13 @@ except ModuleNotFoundError as error:
 	exit(2)
 
 
+
+path = os.path
+CONFIG_PATH = os.path.dirname(__file__) + "/config/"
+IMAGES_PATH = CONFIG_PATH + "images"
+APP_ID_PATH = CONFIG_PATH + "app_id"
+ACTIVITY_PATH = CONFIG_PATH + "activity.json"
+
 helps = [
 	"help: Shows this menu.",
 	"exit: Quits program.",
@@ -22,6 +29,27 @@ helps = [
 	"sitext (text): Changes hover text of small image",
 	"update: Commits all changes."
 ]
+
+
+def check_folder():
+	if path.exists(CONFIG_PATH):
+		return True
+	
+	print("Config folder can't be found, creating a new one.")
+	try:
+		os.mkdir(CONFIG_PATH)
+		os.mknod(IMAGES_PATH)
+		os.mknod(APP_ID_PATH)
+		os.mknod(ACTIVITY_PATH)
+	except:
+		print("Couldn't create the folder, make sure this file is not in a write protected folder.")
+		exit(3)
+	
+	
+	print("Created the folder, filling with templates.")
+	
+		
+
 
 
 def read_images():
@@ -201,7 +229,8 @@ async def aloop(presence: Presence):
 		
 	exit()
 
-
+check_folder()
+exit()
 images = read_images()
 activity = read_activity()
 set_time(activity)
