@@ -73,21 +73,27 @@ def check_folder():
 	
 
 	print("Config generation done, remember to put your application id in 'app_id'.")
+	return False
 
 
 
 def read_images():
 	file = None
 	try:
-		file = open(os.path.dirname(__file__) + "/config/images")
+		file = open(IMAGES_PATH)
 		data = file.read()
+
+		if data == IMAGES_TEMP:
+			print("Template detected.")
+			data = ""
+
 		if data is not None and len(data) > 0:
 			images = data.split()
 		else:
 			print("Warning, no images found. Make sure to check 'images' in config.")
 			images = []
 	except:
-		print("Cannot read activity.json.")
+		print("Cannot read images file.")
 		exit(1)
 	finally:
 		if file is not None:
@@ -101,7 +107,7 @@ def read_activity():
 	activity = {}
 	activity["assets"] = {}
 	try:
-		file = open(os.path.dirname(__file__) + "/config/activity.json")
+		file = open(ACTIVITY_PATH)
 		activity.update(json.load(file))
 		activity_check_image(activity)
 	except:
@@ -144,7 +150,7 @@ def activity_check_image(activity):
 
 def get_app_id():
 	try:
-		file = open(os.path.dirname(__file__) + "/config/app_id")
+		file = open(APP_ID_PATH)
 	except FileNotFoundError:
 		print("Warning \"app_id\" not found, please create one in the same folder with \"main.py\".")
 		return ""
@@ -253,8 +259,9 @@ async def aloop(presence: Presence):
 		
 	exit()
 
-check_folder()
-exit()
+if not check_folder():
+	exit()
+
 images = read_images()
 activity = read_activity()
 set_time(activity)
