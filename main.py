@@ -19,6 +19,7 @@ APP_ID_PATH = CONFIG_PATH + "app_id"
 ACTIVITY_PATH = CONFIG_PATH + "activity.json"
 APP_ID_TEMP = "[insert app id here]"
 IMAGES_TEMP = "Here you can have image whitelist in case you accidentally try to set an image that doesn't exist."
+ACTIVITY_TEMP = "{}"
 
 helps = [
 	"help: Shows this menu.",
@@ -53,6 +54,7 @@ def check_folder():
 	
 	imfile = None
 	appfile = None
+	actfile = None
 	try:
 		appfile = open(APP_ID_PATH, 'w')
 		appfile.write(APP_ID_TEMP)
@@ -70,6 +72,15 @@ def check_folder():
 	finally:
 		if imfile is not None:
 			imfile.close()
+
+	try:
+		actfile = open(ACTIVITY_PATH, 'w')
+		actfile.write(ACTIVITY_TEMP)
+	except Exception as e:
+		print("Error while generating in activity.json template:\n" + str(e))
+	finally:
+		if actfile is not None:
+			actfile.close()
 	
 
 	print("Config generation done, remember to put your application id in 'app_id'.")
