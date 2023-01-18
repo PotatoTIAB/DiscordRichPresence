@@ -10,6 +10,16 @@ except ModuleNotFoundError as error:
 	exit(2)
 
 
+
+path = os.path
+CONFIG_PATH = os.path.dirname(__file__) + "/config/"
+IMAGES_PATH = CONFIG_PATH + "images"
+APP_ID_PATH = CONFIG_PATH + "app_id"
+ACTIVITY_PATH = CONFIG_PATH + "activity.json"
+APP_ID_TEMP = "[insert app id here]"
+IMAGES_TEMP = "Here you can have image whitelist in case you accidentally try to set an image that doesn't exist."
+ACTIVITY_TEMP = "{}"
+
 helps = [
 	"help: Shows this menu.",
 	"exit: Quits program.",
@@ -24,18 +34,77 @@ helps = [
 ]
 
 
+
+def check_folder():
+	if path.exists(CONFIG_PATH):
+		return True
+	
+	print("Config folder can't be found, creating a new one.")
+	try:
+		os.mkdir(CONFIG_PATH)
+		os.mknod(IMAGES_PATH)
+		os.mknod(APP_ID_PATH)
+		os.mknod(ACTIVITY_PATH)
+	except:
+		print("Couldn't create the folder, make sure this file is not in a write protected folder.")
+		exit(3)
+	
+	
+	print("Created the folder, filling with templates.")
+	
+	imfile = None
+	appfile = None
+	actfile = None
+	try:
+		appfile = open(APP_ID_PATH, 'w')
+		appfile.write(APP_ID_TEMP)
+	except Exception as e:
+		print("Error while generating in app_id template:\n" + str(e))
+	finally:
+		if appfile is not None:
+			appfile.close()
+	
+	try:
+		imfile = open(IMAGES_PATH, 'w')
+		imfile.write(IMAGES_TEMP)
+	except Exception as e:
+		print("Error while generating in images template:\n" + str(e))
+	finally:
+		if imfile is not None:
+			imfile.close()
+
+	try:
+		actfile = open(ACTIVITY_PATH, 'w')
+		actfile.write(ACTIVITY_TEMP)
+	except Exception as e:
+		print("Error while generating in activity.json template:\n" + str(e))
+	finally:
+		if actfile is not None:
+			actfile.close()
+	
+
+	print("Config generation done, remember to put your application id in 'app_id'.")
+	return False
+
+
+
 def read_images():
 	file = None
 	try:
-		file = open(os.path.dirname(__file__) + "/config/images")
+		file = open(IMAGES_PATH)
 		data = file.read()
+
+		if data == IMAGES_TEMP:
+			print("Template detected.")
+			data = ""
+
 		if data is not None and len(data) > 0:
 			images = data.split()
 		else:
 			print("Warning, no images found. Make sure to check 'images' in config.")
 			images = []
 	except:
-		print("Cannot read activity.json.")
+		print("Cannot read images file.")
 		exit(1)
 	finally:
 		if file is not None:
@@ -49,7 +118,7 @@ def read_activity():
 	activity = {}
 	activity["assets"] = {}
 	try:
-		file = open(os.path.dirname(__file__) + "/config/activity.json")
+		file = open(ACTIVITY_PATH)
 		activity.update(json.load(file))
 		activity_check_image(activity)
 	except:
@@ -107,7 +176,7 @@ def activity_check_image(activity):
 
 def get_app_id():
 	try:
-		file = open(os.path.dirname(__file__) + "/config/app_id")
+		file = open(APP_ID_PATH)
 	except FileNotFoundError:
 		print("Warning \"app_id\" not found, please create one in the same folder with \"main.py\".")
 		return ""
@@ -219,6 +288,8 @@ async def aloop(presence: Presence):
 		
 	exit()
 
+if not check_folder():
+	exit()
 
 images = read_images()
 activity = read_activity()
