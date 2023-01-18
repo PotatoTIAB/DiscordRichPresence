@@ -70,7 +70,9 @@ def check_folder():
 	finally:
 		if imfile is not None:
 			imfile.close()
-		
+	
+
+	print("Config generation done, remember to put your application id in 'app_id'.")
 
 
 
