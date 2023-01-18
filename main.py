@@ -17,6 +17,8 @@ CONFIG_PATH = os.path.dirname(__file__) + "/config/"
 IMAGES_PATH = CONFIG_PATH + "images"
 APP_ID_PATH = CONFIG_PATH + "app_id"
 ACTIVITY_PATH = CONFIG_PATH + "activity.json"
+APP_ID_TEMP = "[insert app id here]"
+IMAGES_TEMP = "Here you can have image whitelist in case you accidentally try to set an image that doesn't exist."
 
 helps = [
 	"help: Shows this menu.",
@@ -29,6 +31,7 @@ helps = [
 	"sitext (text): Changes hover text of small image",
 	"update: Commits all changes."
 ]
+
 
 
 def check_folder():
@@ -48,6 +51,25 @@ def check_folder():
 	
 	print("Created the folder, filling with templates.")
 	
+	imfile = None
+	appfile = None
+	try:
+		appfile = open(APP_ID_PATH, 'w')
+		appfile.write(APP_ID_TEMP)
+	except Exception as e:
+		print("Error while generating in app_id template:\n" + str(e))
+	finally:
+		if appfile is not None:
+			appfile.close()
+	
+	try:
+		imfile = open(IMAGES_PATH, 'w')
+		imfile.write(IMAGES_TEMP)
+	except Exception as e:
+		print("Error while generating in images template:\n" + str(e))
+	finally:
+		if imfile is not None:
+			imfile.close()
 		
 
 
