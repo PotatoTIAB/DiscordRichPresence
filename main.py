@@ -140,7 +140,8 @@ def get_app_id():
 async def aloop(presence: Presence):
 	i = 0
 	last_time = time.time()
-	update = {"assets": {}}
+	update = {}
+	assets = {}
 	while True:
 		inp = await aio.ainput(">> ")
 		match inp.split():
@@ -172,31 +173,27 @@ async def aloop(presence: Presence):
 			
 			case ["limage", image]:
 				if check_image(image):
-					update["assets"].update({"large_image": image})
+					assets.update({"large_image": image})
 					print(f"Large image is going to be \"{image}\".")
 			
 			case ["simage", image]:
 				if check_image(image):
-					update["assets"].update({"small_image": image})
+					assets.update({"small_image": image})
 					print(f"Small image is going to be \"{image}\".")
 			
 			case ["litext", *text]:
 				text = ' '.join(text)
-				update["assets"].update({"large_text": text})
+				assets.update({"large_text": text})
 				print(f"Large image text is going to be \"{text}\".")
 			
 			case ["sitext", *text]:
 				text = ' '.join(text)
-				update["assets"].update({"small_text": text})
+				assets.update({"small_text": text})
 				print(f"Small image text is going to be \"{text}\".")
 			
 			case ["update"]:
-				if len(update["assets"]) < 1:
-					del update["assets"]
-				
-				if len(update) < 1:
+				if len(update) < 1 and len(assets) < 1:
 					print("There's nothing to update.")
-					update.update({"assets": {}})
 					continue
 					
 				time_passed = time.time() - last_time
@@ -206,9 +203,9 @@ async def aloop(presence: Presence):
 				
 
 				activity.update(update)
+				activity["assets"].update(assets)
 				presence.set(activity)
 				update.clear()
-				update.update({"assets": {}})
 				last_time = time.time()
 			
 			case ["save"]:
